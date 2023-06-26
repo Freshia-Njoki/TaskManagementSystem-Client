@@ -16,7 +16,7 @@ export default function UpdateForm({ setShowEditForm, taskData, getTasks }) {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+
         await Axios.put(`${apiDomain}/task/${taskData.task_id}`, { description: description },
             {
                 headers: { 'Authorization': `${user.token}` }

@@ -7,7 +7,7 @@ import TaskList from './TaskList';
 
 export default function Mainnav() {
   const { ui } = useContext(Context);
-  console.log(ui)
+  // console.log(ui)
   return (
     <div className='mainnav'>
       {

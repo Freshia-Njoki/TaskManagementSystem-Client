@@ -1,7 +1,5 @@
 import './footer.css'
 import { AiFillTwitterCircle, AiFillLinkedin } from 'react-icons/ai'
-import twitter from '../assets/twitter.jpg'
-import linkedln from '../assets/linkedln.png'
 import { Link } from 'react-router-dom'
 function Footer() {
   const year = new Date().getFullYear()
