@@ -22,7 +22,6 @@ export default function UpdateForm({ setShowEditForm, taskData, getTasks }) {
                 headers: { 'Authorization': `${user.token}` }
             })
             .then((res) => {
-                getTasks();
                 alert(res.data.message)
             })
             .catch(({ response }) => {

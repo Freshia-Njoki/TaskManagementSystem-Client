@@ -27,9 +27,7 @@ function LoginForm() {
         if (data.token) {//check if the data has a token
           dispatch({ type: "LOGIN_SUCCESS", payload: data })
           navigate("/Tasks")
-          // alert("login succesful");
-          // localStorage.setItem('token', data.token);
-          // window.location.reload();
+
         }
 
       })

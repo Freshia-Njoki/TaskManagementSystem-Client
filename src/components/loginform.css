@@ -51,7 +51,7 @@
   .submitBtn {
     width: 25%;
     color: rgb(48, 172, 18);
-    border-radius: 2px;
+    border-radius: 5px;
     border: 1px solid rgb(48, 172, 18);
     background-color: transparent;
     cursor: pointer;
@@ -62,4 +62,8 @@
     color: white;
     cursor: pointer;
   }
-  
+.loginBanner{
+  color: #888;
+  font-size: 18px;
+  margin-bottom: 10px;
+}

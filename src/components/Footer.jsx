@@ -1,16 +1,24 @@
 import './footer.css'
+import { AiFillTwitterCircle, AiFillLinkedin } from 'react-icons/ai'
+import twitter from '../assets/twitter.jpg'
+import linkedln from '../assets/linkedln.png'
+import { Link } from 'react-router-dom'
 function Footer() {
   const year = new Date().getFullYear()
   return (
+
     <>
-     <div className="footer"> © The TM {year}</div>
-     <div>linked</div>
-     <a href='https://www.linkedin.com/in/freshia-njoki'></a>
-     <a href='https://www.instagram.com/in/freshia-njoki'></a>
-     <a href='https://www.twitter.com/in/freshia-njoki'></a>
-     
+      <div className="footer">
+        <div className="social-media">
+          <p> © {year} The WorkflowPro</p>
+          <a href="https://www.linkedin.com/in/freshia-njoki">< AiFillTwitterCircle className='icons' /></a>
+          <a href="https://twitter.com/FreshiaNjoki2"><AiFillLinkedin className='icons' /></a>
+        </div>
+        <Link to="/TermsAndPrivacy" style={{ color: "purple" }}> TermsAndPrivacy</Link>
+      </div>
+
     </>
-   
+
   )
 }
 

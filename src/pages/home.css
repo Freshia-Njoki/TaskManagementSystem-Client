@@ -1,6 +1,36 @@
-.home{
-    height: 85vh;
+*{
+    padding: 0px;
+    margin: 0px;
+    border: border-box;
 }
-.home-formWrapper{
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65vh;
+  }
+  
+  .home-formWrapper {
     padding-top: calc(50vh - 200px);
-}
+    width: 400px;
+    height: 300px;
+    padding: 20px;
+    background-color: #f1f1f1;
+    text-align: center;
+  }
+  
+  .home-formWrapper input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .home-formWrapper button {
+    width: 100%;
+    padding: 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 13px;
+  }
+  
