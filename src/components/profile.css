@@ -1,0 +1,48 @@
+.profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.userAvatar {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+}
+
+.userAvatar-img {
+    width: 50%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+
+}
+
+.user-Details {
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-left: 1px dotted lightgoldenrodyellow;
+    padding-left: 20px;
+
+}
+
+.userAvatar-img:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: all 0.5s ease-in-out;
+}
+
+.user-Details > p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: rgb(150, 150, 24);
+    padding-left: 20px;
+}
+
+.user-Details > p:hover{
+    color: rgb(85, 68, 26);
+}
