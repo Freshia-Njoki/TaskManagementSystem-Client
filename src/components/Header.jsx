@@ -14,27 +14,25 @@ function Header() {
 
   };
   return (
-    <div className='header'>
 
-      <div className="header-wrapper">
-        <img src={logo} alt="my logo" />
-
-        <span>Features</span>
-        <span>Plans</span>
-        <Link to="/" style={{ color: "brown" }}><FaHome id="icons" /> Home</Link>
-        <Link to="/signup" style={{ color: "purple" }}><FaInfoCircle id="icons" /> Signup</Link>
-        {
-          user && (
-            <>
-              <Link to="/tasks" style={{ color: "green" }}><FaBook id="icons" /> Tasks</Link>
-              <Link onClick={handleLogout} style={{ color: "red" }}><FaSignOutAlt id="icons" /> Logout</Link>
-            </>
-          )
-        }
-
-      </div>
+    <div className="header-wrapper">
+      <img src={logo} alt="my logo" />
+      <Link to="/" style={{ color: "brown" }}><FaHome id="icons" /> Home</Link>
+      <Link to="/signup" style={{ color: "purple" }}><FaInfoCircle id="icons" /> Signup</Link>
+      <span>Features</span>
+      <span>Plans</span>
+      {
+        user && (
+          <>
+            <Link to="/tasks" style={{ color: "green" }}><FaBook id="icons" /> Tasks</Link>
+            <Link onClick={handleLogout} style={{ color: "red" }}><FaSignOutAlt id="icons" /> Logout</Link>
+          </>
+        )
+      }
 
     </div>
+
+
   )
 }
 

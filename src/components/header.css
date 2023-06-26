@@ -3,3 +3,38 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #f1f1f1;
+    padding: 10px;
+  }
+  
+  .header-wrapper img {
+    padding-left: 0px;
+    width: 150px;
+    height: 80px;
+  }
+  
+  .header-wrapper a {
+    color: #000;
+    margin-left: 10px;
+    text-decoration: none;
+  }
+  
+  .header-wrapper a:hover {
+    color: #333;
+  }
+  
+  .header-wrapper span {
+    margin-left: 10px;
+  }
+  
+  #icons {
+    margin-right: 5px;
+  }
+
+  
