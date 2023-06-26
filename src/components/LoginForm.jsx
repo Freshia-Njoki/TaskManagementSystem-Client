@@ -9,12 +9,12 @@ import { Context } from "../context/userContext/Context";
 
 function LoginForm() {
   const { dispatch } = useContext(Context);
- 
+
   const navigate = useNavigate();
   const schema = yup.object().shape({
     username: yup.string().required("full name is required"),
     password: yup.string().matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/, "should contain special characters, letters, numbers and 4 charcacters long").required("password is required"),
-    
+
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -23,20 +23,20 @@ function LoginForm() {
 
   const sendDataToServer = (data) => {
     Axios.post('http://localhost:8081/auth/login', data)
-    .then(({ data } ) => {
-      if(data.token){//check if the data has a token
-        dispatch({type: "LOGIN_SUCCESS", payload: data})
-        navigate("/Tasks")
-        // alert("login succesful");
-        // localStorage.setItem('token', data.token);
-        // window.location.reload();
-      }
-      
-    })
-    .catch(({response}) => {
-      alert(response.data.error)
-    });
-    
+      .then(({ data }) => {
+        if (data.token) {//check if the data has a token
+          dispatch({ type: "LOGIN_SUCCESS", payload: data })
+          navigate("/Tasks")
+          // alert("login succesful");
+          // localStorage.setItem('token', data.token);
+          // window.location.reload();
+        }
+
+      })
+      .catch(({ response }) => {
+        alert(response.data.error)
+      });
+
   }
   // console.log(user)
   return (

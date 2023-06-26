@@ -4,6 +4,7 @@ import { Context } from '../context/taskContext/Context';
 import { FaUserTie } from 'react-icons/fa'
 import { AiFillFileAdd } from 'react-icons/ai'
 import { TfiViewListAlt } from 'react-icons/tfi'
+import { Sidebar, Menu, SubMenu, MenuItem } from 'react-pro-sidebar'
 
 
 export default function Sidenav() {
@@ -23,16 +24,29 @@ export default function Sidenav() {
   return (
 
     <div className="sidenav">
-      <div className="sidenav_wrapper">
-        <div className="sidenav_title" onClick={handleProfile}><FaUserTie className='icon' />Profile</div>
-      </div>
 
-      <div className="sidenav_wrapper">
-        <div className="sidenav_item" onClick={handleAdd}><AiFillFileAdd className='icon2' />Add Task</div>
-        <div className="sidenav_item" onClick={handleView}><TfiViewListAlt className='icon2' />View Task</div>
-      </div>
+      <Sidebar  >
+        <Menu className="sidenav_wrapper" menuItemStyles={{
+          button: ({ level, active, disabled }) => {
+            // only apply styles on first level elements of the tree
+            if (level === 0)
+              return {
+                color: disabled ? '#f5d9ff' : '#d359ff',
+                backgroundColor: active ? '#eecef9' : undefined,
+              };
+          },
+        }}>
+          <MenuItem onClick={handleProfile}><FaUserTie className='icon' />Profile </MenuItem>
 
+          <MenuItem onClick={handleAdd}><AiFillFileAdd className='icon2' />Add Task</MenuItem>
 
+          <MenuItem onClick={handleView}><TfiViewListAlt className='icon2' />View Task</MenuItem>
+        </Menu>
+
+      </Sidebar>
     </div>
+
+
+
   )
 }
