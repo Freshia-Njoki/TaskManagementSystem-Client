@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import TermsAndPrivacy from './pages/TermsAndPrivacy'
 import { useContext } from "react";
 import { Context } from "./context/userContext/Context";
+import Board from './components/Board/TaskList'
 
 function App() {
   const { user } = useContext(Context)
@@ -23,6 +24,7 @@ function App() {
           <Route path='/tasks' element={user ? <Tasks /> : <Home />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/TermsAndPrivacy' element={<TermsAndPrivacy />} />
+          <Route path='/test' element={<Board />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
         <Footer />
