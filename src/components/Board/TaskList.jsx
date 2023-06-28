@@ -28,48 +28,44 @@ export default function Board() {
     }, []);
 
     useEffect(() => {
-        if (tasks.length > 0) {
-            const columnOrder = tasks
-                .map((task) => task.status)
-                .filter((status, index, self) => self.indexOf(status) === index);
-            const content = {};
+        const columnOrder = ["ToDo", "Doing", "Done"];
+        const content = {};
 
-            columnOrder.forEach((columnId) => {
-                const cards = tasks
-                    .filter((task) => task.status === columnId)
-                    .map((task) => ({
-                        id: `card-${task.task_id}`,
-                        content: task.description,
-                        headerColor: getColumnColor(columnId),
-                        userAvatar:
-                            'https://avatars.dicebear.com/api/big-smile/522313213.svg',
-                    }));
+        columnOrder.forEach((columnId) => {
+            const cards = tasks
+                .filter((task) => task.status === columnId)
+                .map((task) => ({
+                    id: `card-${task.task_id}`,
+                    content: task.description,
+                    headerColor: getColumnColor(columnId),
+                    userAvatar: "https://avatars.dicebear.com/api/big-smile/522313213.svg",
+                }));
 
-                content[`column-${columnId}`] = {
-                    title: columnId,
-                    id: `column-${columnId}`,
-                    cards,
-                };
-            });
+            content[`column-${columnId}`] = {
+                title: columnId,
+                id: `column-${columnId}`,
+                cards,
+            };
+        });
 
-            setData({ columnOrder, content });
-        }
+        setData({ columnOrder, content });
     }, [tasks]);
 
+
     const getColumnColor = (columnId) => {
-        if (columnId === 'ToDo') {
-            return '#54e1f7';
-        } else if (columnId === 'column-Completed') {
-            return '#F52929';
-
-
-        } else {
-            return '#7159c1';
+        if (columnId === "ToDo") {
+            return "#54e1f7";
+        } else if (columnId === "Doing") {
+            return "#7159c1";
+        } else if (columnId === "Done") {
+            return "#F52929";
         }
     };
 
-    function onDragEnd(result) {
 
+    console.log(tasks)
+
+    function onDragEnd(result) {
         const { destination, source, type } = result;
 
         if (!destination) {
@@ -83,12 +79,15 @@ export default function Board() {
             return;
         }
 
-        if (type === 'column') {
+        if (type === "column") {
             const newColumnOrder = [...data.columnOrder];
             const [removed] = newColumnOrder.splice(source.index, 1);
             newColumnOrder.splice(destination.index, 0, removed);
 
-            setData(data, (data.columnOrder = newColumnOrder));
+            setData((prevState) => ({
+                ...prevState,
+                columnOrder: newColumnOrder,
+            }));
             return;
         }
 
@@ -99,7 +98,16 @@ export default function Board() {
             const newItems = [...start.cards];
             const [removed] = newItems.splice(source.index, 1);
             newItems.splice(destination.index, 0, removed);
-            setData(data, (finish.cards = newItems));
+            setData((prevState) => ({
+                ...prevState,
+                content: {
+                    ...prevState.content,
+                    [source.droppableId]: {
+                        ...prevState.content[source.droppableId],
+                        cards: newItems,
+                    },
+                },
+            }));
             return;
         }
 
@@ -109,11 +117,20 @@ export default function Board() {
         finishCards.splice(destination.index, 0, startCards[source.index]);
         startCards.splice(source.index, 1);
 
-        setData(
-            data,
-            (data.content[source.droppableId].cards = startCards),
-            (data.content[destination.droppableId].cards = finishCards)
-        );
+        setData((prevState) => ({
+            ...prevState,
+            content: {
+                ...prevState.content,
+                [source.droppableId]: {
+                    ...prevState.content[source.droppableId],
+                    cards: startCards,
+                },
+                [destination.droppableId]: {
+                    ...prevState.content[destination.droppableId],
+                    cards: finishCards,
+                },
+            },
+        }));
     }
 
 
