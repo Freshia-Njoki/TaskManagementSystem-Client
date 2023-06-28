@@ -3,15 +3,34 @@
     height: 85vh;
     overflow-y: scroll;
 }
-.sidenav_title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
+
 .mainnav_wrapper > h2 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
     padding-left: 1rem;
     color: rgb(85, 68, 26);
+}
+
+.container{
+    display: flex;
+    width: 95%;
+    margin-top: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    
+}
+
+.todos{
+    display: flex;
+    width: 47.5%;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: rgb(50, 195, 295);
+}
+
+.todos_heading{
+    font-size: 30px;
+    color: white;
 }

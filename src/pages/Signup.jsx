@@ -8,9 +8,9 @@ import '../components/loginform.css';
 import './signup.css';
 
 function SignUp() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const schema = yup.object().shape({
-    user_id: yup.string().required('User ID is required'),
+    user_id: yup.string().required('RegNo: is required'),
     username: yup.string().required('Username is required'),
     email: yup
       .string()
@@ -24,7 +24,7 @@ function SignUp() {
     date: yup.date().required('Please enter your date of birth'),
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -32,9 +32,10 @@ function SignUp() {
     Axios.post('http://localhost:8081/auth/register', data)
       .then((response) => {
         response.data.message && alert(response.data.message);//passing message from the backend to frontend
+        reset();
         console.log(response);
       })
-      .catch(({response}) => {
+      .catch(({ response }) => {
         alert(response.data.error);
         // console.log(error);
       });
@@ -45,8 +46,8 @@ function SignUp() {
       <form onSubmit={handleSubmit(sendDataToServer)} className="Form">
         <p className="loginBanner">Signup Page</p>
         <div className="inputGroup">
-          <label htmlFor="user_id">User ID:</label>
-          <input type="text" id="user_id" placeholder="User ID" {...register('user_id')} />
+          <label htmlFor="user_id">RegNo:</label>
+          <input type="text" id="user_id" placeholder="RegNo:" {...register('user_id')} />
           <p className="errorMessage">{errors.user_id?.message}</p>
         </div>
         <div className="inputGroup">

@@ -1,69 +1,119 @@
-import { useEffect, useState, useContext } from 'react'
-import { Context } from '../context/userContext/Context'
-import Axios from 'axios'
-import { apiDomain } from '../utils/utils'
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
-// import { set } from 'react-hook-form'
-import './TaskList.css'
-import UpdateForm from './UpdateForm'
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import './todoBoard.styles.css';
+import Axios from 'axios';
+import { apiDomain } from '../utils/utils';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import UpdateForm from './UpdateForm';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { Context } from '../context/userContext/Context';
 
+const TodoBoard = () => {
+    const item = useRef(null);
 
-export default function TaskList() {
-    const { user } = useContext(Context)
-    const [tasks, setTasks] = useState([])
-    const [showEditForm, setShowEditForm] = useState(false)//edit button
-    const [tempTask, setTempTask] = useState('')
+    const [dragging, setDragging] = useState(false);
+    const [dragEnter, setDragEnter] = useState(false);
+    const { user } = useContext(Context);
+    const [tasks, setTasks] = useState([]);
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [tempTask, setTempTask] = useState('');
 
     const getTasks = async () => {
-        const res = await Axios.get(`${apiDomain}/tasks`, {
-            headers: { 'Authorization': `${user.token}` }
+        try {
+            const res = await Axios.get(`${apiDomain}/tasks`, {
+                headers: { Authorization: user.token },
+            });
+            setTasks(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-        })
-        setTasks(res.data)
-
-    }
     useEffect(() => {
-        getTasks()
-
-    }, [])
-    // console.log(tasks)
+        getTasks();
+    }, []);
 
     const handleDelete = async (id) => {
+        try {
+            await Axios.delete(`${apiDomain}/task/${id}`, {
+                headers: { Authorization: user.token },
+            });
+            getTasks();
+            alert('Task deleted successfully.');
+        } catch (error) {
+            console.error(error);
+            alert('Failed to delete task.');
+        }
+    };
 
-        await Axios.delete(`${apiDomain}/task/${id}`,
-            {
-                headers: { 'Authorization': `${user.token}` }
-            })
-            .then((res) => {
-                // getTasks()
-                alert(res.data.message)
-            }).catch(({ response }) => {
-                alert(response.response.data.error)
-            })
-    }
+    const handleToggle = (task) => {
+        setTempTask(task);
+        setShowEditForm(!showEditForm);
+    };
 
-    const handleToggle = async (task) => {
-        setTempTask(task)
-        setShowEditForm(!showEditForm)
+    const handleDragStart = (e, params) => {
+        item.current = params;
+        console.log('refs in dragStart', item);
+        setTimeout(() => {
+            setDragging(true);
+        }, 0);
 
-    }
+        e.target.addEventListener('dragend', handleDragEnd);
+    };
+
+    const handleDragEnter = (params) => {
+        console.log('dragEnter in: ', params);
+        const dragged = item.current;
+        const newList = [...tasks];
+
+        newList.splice(params.taskId, 0, newList.splice(dragged.taskId, 1)[0]);
+
+        item.current = params;
+        setDragEnter(true);
+        setTasks(newList);
+        console.log('dragEnter new List: ', newList);
+    };
+
+    const handleDragEnd = () => {
+        item.current = null;
+        setDragging(false);
+        setDragEnter(false);
+        console.log('drag has been ended...');
+    };
+
+    const handleStyle = (params) => {
+        const dragged = item.current;
+        if (dragged && dragged.taskId === params.taskId) {
+            return 'drag-bg tasks';
+        } else {
+            return 'tasks';
+        }
+    };
 
     return (
-        <div className='task_wrapper'>
-            {
-                tasks && tasks.map((task, index) => {
-                    return (
-                        <div className="card" key={index}>
-                            <p>{task.description}</p>
-                            <AiFillDelete className='delIcon' onClick={() => handleDelete(task.task_id)} />
-                            <AiFillEdit className='Icon' onClick={() => handleToggle(task)} />
-                            {
-                                showEditForm && (<UpdateForm setShowEditForm={setShowEditForm} taskData={tempTask} getTasks={{ getTasks }} />)
-                            }
-                        </div>
-                    )
-                })
-            }
+        <div>
+            {tasks.map((task, taskId) => (
+                <div
+                    key={taskId}
+                    draggable
+                    className={dragging && dragEnter ? handleStyle({ taskId }) : 'tasks'}
+                    onDragStart={(e) => handleDragStart(e, { taskId })}
+                    onDragEnter={() => handleDragEnter({ taskId })}
+                >
+                    <div className="card">
+                        <p>{task.description}</p>
+                        <AiFillDelete className="delIcon" onClick={() => handleDelete(task.task_id)} />
+                        <AiFillEdit className="Icon" onClick={() => handleToggle(task)} />
+                        {showEditForm && <UpdateForm setShowEditForm={setShowEditForm} taskData={tempTask} getTasks={getTasks} />}
+                    </div>
+                </div>
+            ))}
         </div>
-    )
-}
+    );
+};
+
+export default TodoBoard;
+
+
+
+
+

@@ -1,40 +1,95 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-
 .header-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #f1f1f1;
+  padding: 10px;
+}
+
+.header-wrapper img {
+  padding-left: 0px;
+  width: 150px;
+  height: 80px;
+}
+
+.header-wrapper a {
+  color: #000;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.header-wrapper a:hover {
+  color: #333;
+}
+
+.header-wrapper span {
+  margin-left: 10px;
+}
+
+#icons {
+  margin-right: 5px;
+}
+
+  /* features style */
+  .header-wrapper {
+    position: relative;
+    margin-bottom: 0;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    margin-top: 0;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    background-color: #fff;
+    border: 1px solid #ccc;
     padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1;
+    opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  pointer-events: none;
   }
   
-  .header-wrapper img {
-    padding-left: 0px;
-    width: 150px;
-    height: 80px;
+  .header-wrapper:hover .dropdown-menu,
+.dropdown-menu:hover {
+  display: block !important;
+}
+  
+  .dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  
+.header-wrapper:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+  pointer-events: auto;
+}
+  
+  .dropdown-menu li {
+    padding: 5px 0;
   }
   
-  .header-wrapper a {
-    color: #000;
-    margin-left: 10px;
+  .dropdown-menu a {
+    color: #333;
     text-decoration: none;
   }
   
-  .header-wrapper a:hover {
-    color: #333;
+  .dropdown-menu a:hover {
+    text-decoration: underline;
   }
-  
-  .header-wrapper span {
-    margin-left: 10px;
-  }
-  
-  #icons {
-    margin-right: 5px;
-  }
-
   

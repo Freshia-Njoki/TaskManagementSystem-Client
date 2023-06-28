@@ -4,7 +4,7 @@ import { Context } from '../context/taskContext/Context';
 import { FaUserTie } from 'react-icons/fa'
 import { AiFillFileAdd } from 'react-icons/ai'
 import { TfiViewListAlt } from 'react-icons/tfi'
-import { Sidebar, Menu, SubMenu, MenuItem } from 'react-pro-sidebar'
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar'
 
 
 export default function Sidenav() {
