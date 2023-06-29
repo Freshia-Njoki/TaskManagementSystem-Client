@@ -8,32 +8,35 @@ import { Container } from './styles';
 import Column from '../Column/Column';
 
 export default function Board() {
-    const [data, setData] = useState(null);
     const { user } = useContext(Context);
+
+    const [data, setData] = useState(null);
     const [tasks, setTasks] = useState([]);
 
-    const getTasks = async () => {
+    useEffect(() => {
+        const storedTasks = localStorage.getItem('tasks');
+        if (storedTasks) {
+            setTasks(JSON.parse(storedTasks));
+        } else {
+            fetchTasks();
+        }
+    }, []);
+
+    const fetchTasks = async () => {
         try {
             const res = await Axios.get(`${apiDomain}/tasks`, {
                 headers: { Authorization: user.token },
             });
-            const updatedTasks = res.data.map((task) => ({
-                ...task,
-                status: "ToDo",
-            }));
+            const updatedTasks = res.data;
             setTasks(updatedTasks);
+            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
         } catch (error) {
             console.error(error);
         }
     };
 
-
     useEffect(() => {
-        getTasks();
-    }, []);
-
-    useEffect(() => {
-        const columnOrder = ["ToDo", "Doing", "Done"];
+        const columnOrder = ['ToDo', 'Doing', 'Done'];
         const content = {};
 
         columnOrder.forEach((columnId) => {
@@ -43,11 +46,8 @@ export default function Board() {
                     id: `card-${task.task_id}`,
                     content: task.description,
                     headerColor: getColumnColor(columnId),
-                    userAvatar: "https://avatars.dicebear.com/api/big-smile/522313213.svg",
+                    userAvatar: 'https://avatars.dicebear.com/api/big-smile/522313213.svg',
                 }));
-
-            console.log("jdfaskldfjas")
-            console.log(cards)
 
             content[`column-${columnId}`] = {
                 title: columnId,
@@ -59,18 +59,15 @@ export default function Board() {
         setData({ columnOrder, content });
     }, [tasks]);
 
-
     const getColumnColor = (columnId) => {
-        if (columnId === "ToDo") {
-            return "#54e1f7";
-        } else if (columnId === "Doing") {
-            return "#7159c1";
-        } else if (columnId === "Done") {
-            return "#F52929";
+        if (columnId === 'ToDo') {
+            return '#54e1f7';
+        } else if (columnId === 'Doing') {
+            return '#7159c1';
+        } else if (columnId === 'Done') {
+            return '#F52929';
         }
     };
-
-
 
     function onDragEnd(result) {
         const { destination, source, type } = result;
@@ -79,14 +76,11 @@ export default function Board() {
             return;
         }
 
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
+        if (destination.droppableId === source.droppableId && destination.index === source.index) {
             return;
         }
 
-        if (type === "column") {
+        if (type === 'column') {
             const newColumnOrder = [...data.columnOrder];
             const [removed] = newColumnOrder.splice(source.index, 1);
             newColumnOrder.splice(destination.index, 0, removed);
@@ -121,11 +115,26 @@ export default function Board() {
         const startCards = [...start.cards];
         const finishCards = [...finish.cards];
 
-        const taskToMove = startCards[source.index];
-        taskToMove.status = finish.title; // Update task status based on the column name
+        const taskToMove = { ...startCards[source.index] }; // Create a new object
+
+        // Update the task status based on the column name
+        taskToMove.status = finish.title;
 
         finishCards.splice(destination.index, 0, taskToMove);
         startCards.splice(source.index, 1);
+
+        const updatedTasks = tasks.map((task) => {
+            if (task.task_id === parseInt(taskToMove.id.split('-')[1])) {
+                return {
+                    ...task,
+                    status: taskToMove.status,
+                };
+            }
+            return task;
+        });
+
+        setTasks(updatedTasks);
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
 
         setData((prevState) => ({
             ...prevState,
@@ -159,11 +168,7 @@ export default function Board() {
                         {...provided.droppableProps}
                     >
                         {data.columnOrder.map((columnId, index) => {
-                            const column = data.content[`column-${columnId}`]
-
-                            // console.log(data)
-
-                            // console.log(data.content)
+                            const column = data.content[`column-${columnId}`];
                             return <Column key={index} data={column} index={index} />;
                         })}
                         {provided.placeholder}
