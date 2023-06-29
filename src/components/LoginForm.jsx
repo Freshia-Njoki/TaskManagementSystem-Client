@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { apiDomain } from '../utils/utils'
 import { Context } from "../context/userContext/Context";
 
 function LoginForm() {
@@ -22,7 +23,7 @@ function LoginForm() {
   })
 
   const sendDataToServer = (data) => {
-    Axios.post('http://localhost:8081/auth/login', data)
+    Axios.post(`${apiDomain}auth/login`, data)
       .then(({ data }) => {
         if (data.token) {//check if the data has a token
           dispatch({ type: "LOGIN_SUCCESS", payload: data })

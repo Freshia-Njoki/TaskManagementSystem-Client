@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Axios from 'axios';
+import { apiDomain } from '../utils/utils';
 import '../components/loginform.css';
 import './signup.css';
 
@@ -29,7 +30,7 @@ function SignUp() {
   });
 
   const sendDataToServer = (data) => {
-    Axios.post('http://localhost:8081/auth/register', data)
+    Axios.post(`${apiDomain}auth/register`, data)
       .then((response) => {
         response.data.message && alert(response.data.message);//passing message from the backend to frontend
         reset();
