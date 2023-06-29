@@ -24,19 +24,21 @@ export default function Board() {
 
     const fetchAndSetTasks = async () => {
         try {
-            const res = await Axios.get(`${apiDomain}/tasks`, {
-                headers: { Authorization: user.token },
-            });
+            const storedTasks = localStorage.getItem('tasks');
+            if (storedTasks) {
+                setTasks(JSON.parse(storedTasks));
+            } else {
+                const res = await Axios.get(`${apiDomain}/tasks`, {
+                    headers: { Authorization: user.token },
+                });
 
-            const fetchedTasks = res.data.map((task) => ({
-                ...task,
-                status: 'ToDo',
-            }));
+                const fetchedTasks = res.data.map((task) => ({
+                    ...task,
+                }));
 
-            // Update the tasks in local storage
-            localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
-
-            setTasks(fetchedTasks);
+                setTasks(fetchedTasks);
+                localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
+            }
         } catch (error) {
             console.error(error);
         }
@@ -115,6 +117,7 @@ export default function Board() {
         setTasks(updatedTasks);
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
     };
+
     function onDragEnd(result) {
         const { destination, source, type } = result;
 
