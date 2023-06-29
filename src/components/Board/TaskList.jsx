@@ -17,11 +17,16 @@ export default function Board() {
             const res = await Axios.get(`${apiDomain}/tasks`, {
                 headers: { Authorization: user.token },
             });
-            setTasks(res.data);
+            const updatedTasks = res.data.map((task) => ({
+                ...task,
+                status: "ToDo",
+            }));
+            setTasks(updatedTasks);
         } catch (error) {
             console.error(error);
         }
     };
+
 
     useEffect(() => {
         getTasks();
@@ -40,6 +45,9 @@ export default function Board() {
                     headerColor: getColumnColor(columnId),
                     userAvatar: "https://avatars.dicebear.com/api/big-smile/522313213.svg",
                 }));
+
+            console.log("jdfaskldfjas")
+            console.log(cards)
 
             content[`column-${columnId}`] = {
                 title: columnId,
@@ -63,7 +71,6 @@ export default function Board() {
     };
 
 
-    console.log(tasks)
 
     function onDragEnd(result) {
         const { destination, source, type } = result;
@@ -114,7 +121,10 @@ export default function Board() {
         const startCards = [...start.cards];
         const finishCards = [...finish.cards];
 
-        finishCards.splice(destination.index, 0, startCards[source.index]);
+        const taskToMove = startCards[source.index];
+        taskToMove.status = finish.title; // Update task status based on the column name
+
+        finishCards.splice(destination.index, 0, taskToMove);
         startCards.splice(source.index, 1);
 
         setData((prevState) => ({
@@ -134,6 +144,7 @@ export default function Board() {
     }
 
 
+
     if (!data) {
         return <div>Loading...</div>;
     }
@@ -150,7 +161,9 @@ export default function Board() {
                         {data.columnOrder.map((columnId, index) => {
                             const column = data.content[`column-${columnId}`]
 
-                            console.log(data.content)
+                            // console.log(data)
+
+                            // console.log(data.content)
                             return <Column key={index} data={column} index={index} />;
                         })}
                         {provided.placeholder}
