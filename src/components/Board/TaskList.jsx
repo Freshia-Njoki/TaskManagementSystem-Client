@@ -12,28 +12,53 @@ export default function Board() {
 
     const [data, setData] = useState(null);
     const [tasks, setTasks] = useState([]);
+    const [fetchedTask, setFetchedTask] = useState([])
 
     useEffect(() => {
         const storedTasks = localStorage.getItem('tasks');
-        if (storedTasks) {
-            setTasks(JSON.parse(storedTasks));
-        } else {
-            fetchTasks();
-        }
+
+        setTasks(JSON.parse(storedTasks));
+
+
+        fetchAndSetTasks();
+
     }, []);
 
-    const fetchTasks = async () => {
+    const fetchAndSetTasks = async () => {
         try {
+            // Fetch tasks from the backend
             const res = await Axios.get(`${apiDomain}/tasks`, {
                 headers: { Authorization: user.token },
             });
-            const updatedTasks = res.data;
-            setTasks(updatedTasks);
-            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+
+            const fetchedTasks = res.data.map((task) => ({
+                ...task,
+                status: "ToDo",
+            }));
+
+            // Retrieve tasks from local storage
+            const storedTasks = localStorage.getItem('tasks');
+
+            if (storedTasks) {
+                const existingTasks = JSON.parse(storedTasks);
+                const filteredTasks = fetchedTasks.filter(
+                    (task) => !existingTasks.some((existingTask) => existingTask.task_id === task.task_id)
+                );
+
+                const updatedTasks = [...existingTasks, ...filteredTasks];
+                setTasks(updatedTasks);
+                localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+            } else {
+                setTasks(fetchedTasks);
+                localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
+            }
         } catch (error) {
             console.error(error);
         }
     };
+
+
+
 
     useEffect(() => {
         const columnOrder = ['ToDo', 'Doing', 'Done'];
@@ -96,6 +121,9 @@ export default function Board() {
         const finish = data.content[destination.droppableId];
 
         if (start === finish) {
+            if (newItems.some((item) => item.id === taskToMove.id)) {
+                return;
+            }
             const newItems = [...start.cards];
             const [removed] = newItems.splice(source.index, 1);
             newItems.splice(destination.index, 0, removed);
@@ -152,8 +180,6 @@ export default function Board() {
         }));
     }
 
-
-
     if (!data) {
         return <div>Loading...</div>;
     }
@@ -162,11 +188,7 @@ export default function Board() {
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="all-columns" direction="horizontal" type="column">
                 {(provided) => (
-                    <Container
-                        ref={provided.innerRef}
-                        innerRef={provided.innerRef}
-                        {...provided.droppableProps}
-                    >
+                    <Container ref={provided.innerRef} {...provided.droppableProps}>
                         {data.columnOrder.map((columnId, index) => {
                             const column = data.content[`column-${columnId}`];
                             return <Column key={index} data={column} index={index} />;

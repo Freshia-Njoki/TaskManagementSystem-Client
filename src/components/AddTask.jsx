@@ -24,6 +24,7 @@ export default function AddTask() {
                 'Authorization': `${user.token}`,//user from context
             }
         }).then((response) => {
+            // console.log(response.data)
             reset();
             response.data.message && alert(response.data.message)
 
@@ -33,12 +34,15 @@ export default function AddTask() {
 
     }
 
+
+
     return (
         < div className='formWrapper' >
             <form onSubmit={handleSubmit(onSubmit)} className='Form'>
                 <textarea placeholder="Add a task" {...register("description")}>
                 </textarea>
                 <p>{errors.description?.message}</p>
+
                 <input className='submitBtn' type="submit" value="save" />
             </form>
 
