@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
-import './app.css'
 import Signup from './pages/Signup'
 import Tasks from './pages/Tasks'
 import NotFound from './pages/NotFound'
@@ -11,6 +10,7 @@ import TermsAndPrivacy from './pages/TermsAndPrivacy'
 import { useContext } from "react";
 import { Context } from "./context/userContext/Context";
 import Board from './components/Board/TaskList'
+
 
 function App() {
   const { user } = useContext(Context)
