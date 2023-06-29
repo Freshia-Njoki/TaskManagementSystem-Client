@@ -23,20 +23,25 @@ function LoginForm() {
   })
 
   const sendDataToServer = (data) => {
-    Axios.post(`${apiDomain}auth/login`, data)
-      .then(({ data }) => {
-        if (data.token) {//check if the data has a token
-          dispatch({ type: "LOGIN_SUCCESS", payload: data })
-          navigate("/Tasks")
-
+    Axios.post(`${apiDomain}/auth/login`, data)
+      .then((response) => {
+        const { data } = response;
+        if (data.token) {
+          dispatch({ type: "LOGIN_SUCCESS", payload: data });
+          navigate("/Tasks");
+        } else {
+          alert("Invalid response from the server");
         }
-
       })
-      .catch(({ response }) => {
-        alert(response.data.error)
+      .catch((error) => {
+        if (error.response && error.response.data && error.response.data.error) {
+          alert(error.response.data.error);
+        } else {
+          alert("An error occurred while logging in");
+        }
       });
+  };
 
-  }
   // console.log(user)
   return (
     <>

@@ -11,6 +11,10 @@ export const Container = styled.div`
 
   background: #ffffff;
   box-shadow: 0px 1px 4px #bbb;
+
+  &:nth(last-item){
+    display:none;
+  }
 `;
 
 export const Title = styled.h3`

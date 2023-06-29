@@ -3,6 +3,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Axios from 'axios';
 import { apiDomain } from '../../utils/utils';
 import { Context } from '../../context/userContext/Context';
+import UpdateForm from '../UpdateForm';
 
 import { Container } from './styles';
 import Column from '../Column/Column';
@@ -12,53 +13,62 @@ export default function Board() {
 
     const [data, setData] = useState(null);
     const [tasks, setTasks] = useState([]);
-    const [fetchedTask, setFetchedTask] = useState([])
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [tempTask, setTempTask] = useState(null);
 
     useEffect(() => {
         const storedTasks = localStorage.getItem('tasks');
-
         setTasks(JSON.parse(storedTasks));
-
-
         fetchAndSetTasks();
-
     }, []);
 
     const fetchAndSetTasks = async () => {
         try {
-            // Fetch tasks from the backend
             const res = await Axios.get(`${apiDomain}/tasks`, {
                 headers: { Authorization: user.token },
             });
 
             const fetchedTasks = res.data.map((task) => ({
                 ...task,
-                status: "ToDo",
+                status: 'ToDo',
             }));
 
-            // Retrieve tasks from local storage
-            const storedTasks = localStorage.getItem('tasks');
+            // Update the tasks in local storage
+            localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
 
-            if (storedTasks) {
-                const existingTasks = JSON.parse(storedTasks);
-                const filteredTasks = fetchedTasks.filter(
-                    (task) => !existingTasks.some((existingTask) => existingTask.task_id === task.task_id)
-                );
-
-                const updatedTasks = [...existingTasks, ...filteredTasks];
-                setTasks(updatedTasks);
-                localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-            } else {
-                setTasks(fetchedTasks);
-                localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
-            }
+            setTasks(fetchedTasks);
         } catch (error) {
             console.error(error);
         }
     };
 
+    const handleDeleteTask = async (id) => {
+        const regex = /card-(\d+)/;
+        const match = id.match(regex);
+        const temp = match ? match[1] : null;
 
+        try {
+            await Axios.delete(`${apiDomain}/task/${temp}`, {
+                headers: { Authorization: `${user.token}` },
+            });
 
+            const updatedTasks = tasks.filter((task) => task.task_id != temp);
+            setTasks(updatedTasks);
+            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+        } catch (error) {
+            if (error.response) {
+                alert(error.response.data.error);
+            } else {
+                alert('Error occurred while deleting the task');
+            }
+        }
+    };
+
+    const handleEditTask = (taskId) => {
+        const task = tasks.find((task) => task.task_id === parseInt(taskId.split('-')[1]));
+        setTempTask(task);
+        setShowEditForm(true);
+    };
 
     useEffect(() => {
         const columnOrder = ['ToDo', 'Doing', 'Done'];
@@ -94,6 +104,17 @@ export default function Board() {
         }
     };
 
+    const updateTask = (updatedTask) => {
+        const updatedTasks = tasks.map((task) => {
+            if (task.task_id === updatedTask.task_id) {
+                return updatedTask;
+            }
+            return task;
+        });
+
+        setTasks(updatedTasks);
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    };
     function onDragEnd(result) {
         const { destination, source, type } = result;
 
@@ -161,6 +182,8 @@ export default function Board() {
             return task;
         });
 
+
+
         setTasks(updatedTasks);
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
 
@@ -191,9 +214,28 @@ export default function Board() {
                     <Container ref={provided.innerRef} {...provided.droppableProps}>
                         {data.columnOrder.map((columnId, index) => {
                             const column = data.content[`column-${columnId}`];
-                            return <Column key={index} data={column} index={index} />;
+                            return (
+                                <Column
+                                    key={index}
+                                    data={column}
+                                    index={index}
+                                    onDelete={handleDeleteTask}
+                                    onEdit={handleEditTask}
+                                />
+                            );
                         })}
                         {provided.placeholder}
+                        /
+
+                        {showEditForm && (
+                            <UpdateForm
+                                setShowEditForm={setShowEditForm}
+                                taskData={tempTask}
+                                updateTask={updateTask}
+                                getTasks={fetchAndSetTasks}
+                            />
+                        )}
+
                     </Container>
                 )}
             </Droppable>

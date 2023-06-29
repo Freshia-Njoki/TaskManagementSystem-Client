@@ -3,7 +3,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { Container, Title, TaskList } from './styles';
 import Card from '../Card/Card';
 
-export default function Column({ data, index }) {
+export default function Column({ data, index, onDelete, onEdit }) {
 
     return (
         <Draggable draggableId={data.task_id} index={index}>
@@ -24,10 +24,17 @@ export default function Column({ data, index }) {
                                 isDraggingOver={snapshot.isDraggingOver}
                             >
                                 {data.cards.map((card, index) => (
-                                    <Card key={card.id} data={card} index={index} />
+                                    <Card
+                                        key={card.id}
+                                        data={card}
+                                        index={index}
+                                        onDelete={onDelete}
+                                        onEdit={onEdit}
+                                    />
                                 ))}
                                 {provided.placeholder}
                             </TaskList>
+
                         )}
                     </Droppable>
                 </Container>
