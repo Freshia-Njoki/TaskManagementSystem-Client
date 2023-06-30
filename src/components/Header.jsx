@@ -39,35 +39,36 @@ function Header() {
   return (
     <div className="header-wrapper">
       <img src={logo} alt="my logo" />
-      <Link to="/" style={{ color: 'brown' }}>
+      <Link to="/" style={{ color: 'brown' }} >
         <FaHome id="icons" /> Home
       </Link>
 
       <div >
-        <span onMouseEnter={() => setFeaturesVisible(true)} onMouseLeave={() => setFeaturesVisible(false)}>
+        <span onMouseEnter={() => setFeaturesVisible(true)} onMouseLeave={() => setFeaturesVisible(false)} >
           Features <RiArrowDropDownLine /> {isFeaturesVisible && featuresContent}
 
         </span>
       </div>
 
       <div >
-        <span onMouseEnter={() => setPlansVisible(true)} onMouseLeave={() => setPlansVisible(false)}>
+        <span onMouseEnter={() => setPlansVisible(true)} onMouseLeave={() => setPlansVisible(false)} >
           Plans  <RiArrowDropDownLine /> {isPlansVisible && plansContent}
         </span>
       </div>
       {user && (
         <>
-          <Link to="/tasks" style={{ color: 'green' }}>
+          <Link to="/tasks" style={{ color: 'green' }} >
             <FaBook id="icons" /> Tasks
           </Link>
-          <Link to="/signup" style={{ color: 'purple' }}>
+          <Link to="/signup" style={{ color: 'purple' }} >
             <FaInfoCircle id="icons" /> Signup
           </Link>
-          <Link onClick={handleLogout} style={{ color: 'red' }}>
+          <Link onClick={handleLogout} style={{ color: 'red' }} >
             <FaSignOutAlt id="icons" /> Logout
           </Link>
         </>
       )}
+
     </div>
   );
 }
