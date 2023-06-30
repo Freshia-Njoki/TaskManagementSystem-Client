@@ -228,7 +228,6 @@ export default function Board() {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <h2>Track your tasks✨ with drag and drop capabities</h2>
             <Droppable droppableId="all-columns" direction="horizontal" type="column">
                 {(provided) => (
                     <Container ref={provided.innerRef} {...provided.droppableProps}>
@@ -236,8 +235,6 @@ export default function Board() {
                             const column = data.content[`column-${columnId}`];
 
                             return (
-
-
                                 <Column
                                     key={index}
                                     data={column}
@@ -245,9 +242,7 @@ export default function Board() {
                                     onDelete={handleDeleteTask}
                                     onEdit={handleEditTask}
                                 />
-
                             );
-
                         })}
                         {provided.placeholder}
 
@@ -263,6 +258,5 @@ export default function Board() {
                 )}
             </Droppable>
         </DragDropContext>
-
     );
 }
