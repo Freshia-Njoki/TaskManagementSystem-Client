@@ -4,7 +4,7 @@ import { apiDomain } from '../utils/utils';
 import Axios from 'axios';
 import './updateform.css';
 
-export default function UpdateForm({ setShowEditForm, taskData, getTasks }) {
+export default function UpdateForm({ setShowEditForm, taskData, updateTask }) {
     const { user } = useContext(Context);
     const [description, setDescription] = useState('');
 
@@ -26,8 +26,11 @@ export default function UpdateForm({ setShowEditForm, taskData, getTasks }) {
 
             alert('Task updated successfully');
 
-            // Call the getTasks function to fetch and update the tasks in the Board component
-            getTasks();
+            // Update the description in the taskData object
+            const updatedTaskData = { ...taskData, description: description };
+
+            // Call the updateTask function passed from the Board component to update the task in state and localStorage
+            updateTask(updatedTaskData);
 
             // Close the edit form
             setShowEditForm(false);

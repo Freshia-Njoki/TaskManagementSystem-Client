@@ -23,36 +23,55 @@ export default function Board() {
         }
         fetchAndSetTasks();
     }, []);
-
     const fetchAndSetTasks = async () => {
         try {
+            // Get tasks from local storage
+            const storedTasks = JSON.parse(localStorage.getItem("tasks"));
+            if (storedTasks) {
+                setTasks(storedTasks);
+            }
+
+            // Fetch tasks from the API
             const res = await Axios.get(`${apiDomain}/tasks`, {
                 headers: { Authorization: user.token },
             });
 
             const fetchedTasks = res.data.map((task) => ({
                 ...task,
-                status: "ToDo"
             }));
 
-            setTasks(fetchedTasks);
-            localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
+            // Compare fetched tasks with stored tasks to find the new ones
+            const newTasks = fetchedTasks.filter(
+                (fetchedTask) =>
+                    !storedTasks ||
+                    !storedTasks.some((storedTask) => storedTask.task_id === fetchedTask.task_id)
+            );
+
+            // Update local storage with the new tasks
+            const updatedTasks = storedTasks ? [...storedTasks, ...newTasks] : newTasks;
+            localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+            // Set tasks in state
+            setTasks(updatedTasks);
         } catch (error) {
             console.error(error);
         }
     };
 
+
+    console.log(tasks)
+
     const handleDeleteTask = async (id) => {
         const regex = /card-(\d+)/;
         const match = id.match(regex);
-        const temp = match ? match[1] : null;
+        const taskId = match ? parseInt(match[1]) : null;
 
         try {
-            await Axios.delete(`${apiDomain}/task/${temp}`, {
+            await Axios.delete(`${apiDomain}/task/${taskId}`, {
                 headers: { Authorization: user.token },
             });
 
-            const updatedTasks = tasks.filter((task) => task.task_id !== temp);
+            const updatedTasks = tasks.filter((task) => task.task_id !== taskId);
             setTasks(updatedTasks);
             localStorage.setItem('tasks', JSON.stringify(updatedTasks));
         } catch (error) {
@@ -63,6 +82,7 @@ export default function Board() {
             }
         }
     };
+
 
     const handleEditTask = (taskId) => {
         const task = tasks.find((task) => task.task_id === parseInt(taskId.split('-')[1]));
@@ -231,7 +251,6 @@ export default function Board() {
                                 setShowEditForm={setShowEditForm}
                                 taskData={tempTask}
                                 updateTask={updateTask}
-                                getTasks={fetchAndSetTasks}
                             />
                         )}
 
