@@ -61,15 +61,16 @@ function Header() {
           Plans  <RiArrowDropDownLine /> {isPlansVisible && plansContent}
         </span>
       </div>
+      <Link to="/signup" style={{ color: '#4685ff' }} >
+        <FaInfoCircle id="icons" /> Signup
+      </Link>
 
       {user && (
         <>
           <Link to="/tasks" style={{ color: '#3CD3AD' }}>
             <FaBook id="icons" /> Tasks
           </Link>
-          <Link to="/signup" style={{ color: '#4685ff' }} >
-            <FaInfoCircle id="icons" /> Signup
-          </Link>
+
           <Link onClick={handleLogout} style={{ color: '#E64D10' }} >
             <FaSignOutAlt id="icons" /> Logout
           </Link>

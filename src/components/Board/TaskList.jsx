@@ -45,13 +45,7 @@ export default function Board() {
                     status: "ToDo"
                 }));
 
-
                 setTemp(res)
-
-
-
-
-
                 setTasks(fetchedTasks);
                 localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
 
@@ -64,8 +58,6 @@ export default function Board() {
     };
 
     console.log(temp)
-
-
 
     const handleDeleteTask = async (id) => {
         const regex = /card-(\d+)/;

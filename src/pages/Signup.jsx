@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -8,6 +8,7 @@ import '../components/loginform.css';
 import './signup.css';
 
 function Signup() {
+  const navigate = useNavigate();
   const schema = yup.object().shape({
     user_id: yup.string().required('RegNo: is required'),
     username: yup.string().required('Username is required'),
@@ -35,6 +36,7 @@ function Signup() {
       }
       reset();
       console.log(response);
+      navigate('/tasks')
     } catch (error) {
       console.log(error);
       if (error.response) {
@@ -81,7 +83,7 @@ function Signup() {
           <p className="errorMessage">{errors.date?.message}</p>
         </div>
         <input type="submit" value="Submit" className="submitBtn" />
-        <p>Already a member? <Link to="/login">Login</Link></p>
+        <p>Have an Account? <Link to="/login">Login</Link></p>
       </form>
 
 
