@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
-import Signup from './pages/Signup'
+import SignUp from './pages/Signup'
 import Tasks from './pages/Tasks'
 import NotFound from './pages/NotFound'
 import Header from './components/Header'
@@ -20,8 +20,9 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/signup' element={<Signup />} />
+          <Route path='/signup' element={<SignUp />} />
           <Route path='/tasks' element={user ? <Tasks /> : <Home />} />
+          <Route path='/Login' element={<Home />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/TermsAndPrivacy' element={<TermsAndPrivacy />} />
           <Route path='/test' element={<Board />} />

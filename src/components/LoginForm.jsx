@@ -37,6 +37,7 @@ function LoginForm() {
         if (error.response && error.response.data && error.response.data.error) {
           alert(error.response.data.error);
         } else {
+          console.log(error)
           alert("An error occurred while logging in");
         }
       });
@@ -58,7 +59,7 @@ function LoginForm() {
 
       </form>
 
-      {/* <p>Already a member? <a href='/src/pages/Login.jsx'></a></p> */}
+
     </>
   )
 }

@@ -1,6 +1,5 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Axios from 'axios';
@@ -8,8 +7,7 @@ import { apiDomain } from '../utils/utils';
 import '../components/loginform.css';
 import './signup.css';
 
-function SignUp() {
-  const navigate = useNavigate();
+function Signup() {
   const schema = yup.object().shape({
     user_id: yup.string().required('RegNo: is required'),
     username: yup.string().required('Username is required'),
@@ -29,18 +27,24 @@ function SignUp() {
     resolver: yupResolver(schema),
   });
 
-  const sendDataToServer = (data) => {
-    Axios.post(`${apiDomain}auth/register`, data)
-      .then((response) => {
-        response.data.message && alert(response.data.message);//passing message from the backend to frontend
-        reset();
-        console.log(response);
-      })
-      .catch(({ response }) => {
-        alert(response.data.error);
-        // console.log(error);
-      });
+  const sendDataToServer = async (data) => {
+    try {
+      const response = await Axios.post(`${apiDomain}/auth/register`, data);
+      if (response.data.message) {
+        alert(response.data.message);
+      }
+      reset();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        alert(error.response.data.error);
+      } else {
+        alert('Error occurred while sending data to the server');
+      }
+    }
   };
+
 
   return (
     <div className="formWrapper">
@@ -77,11 +81,12 @@ function SignUp() {
           <p className="errorMessage">{errors.date?.message}</p>
         </div>
         <input type="submit" value="Submit" className="submitBtn" />
+        <p>Already a member? <Link to="/login">Login</Link></p>
       </form>
 
-      {/* <p>Already a member? <a href="/src/pages/Login.jsx">Login</a></p> */}
-    </div>
+
+    </div >
   );
 }
 
-export default SignUp;
+export default Signup;

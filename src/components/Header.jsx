@@ -21,7 +21,6 @@ function Header() {
       <p> No matter the project, workflow, or type of team, workflow can help keep things organized.<br />
         It’s simple – sign-up, create a board, and you’re off! Productivity awaits.</p>
     </div>
-
   );
 
   const plansContent = (
@@ -35,40 +34,47 @@ function Header() {
     </div>
   );
 
-
   return (
     <div className="header-wrapper">
       <img src={logo} alt="my logo" />
-      <Link to="/" style={{ color: 'brown' }} >
-        <FaHome id="icons" /> Home
-      </Link>
+      <Link to="/" style={{ color: '#F024A6' }}><FaHome id="icons" /> Home</Link>
 
-      <div >
-        <span onMouseEnter={() => setFeaturesVisible(true)} onMouseLeave={() => setFeaturesVisible(false)} >
+      <div>
+        <span
+          onMouseEnter={() => setFeaturesVisible(true)}
+          onMouseLeave={() => setFeaturesVisible(false)}
+          style={{ color: '#ffb084' }}
+
+        >
           Features <RiArrowDropDownLine /> {isFeaturesVisible && featuresContent}
-
         </span>
       </div>
 
-      <div >
-        <span onMouseEnter={() => setPlansVisible(true)} onMouseLeave={() => setPlansVisible(false)} >
+      <div>
+        <span
+          onMouseEnter={() => setPlansVisible(true)}
+          onMouseLeave={() => setPlansVisible(false)}
+
+          style={{ color: '#ffb084' }}
+
+        >
           Plans  <RiArrowDropDownLine /> {isPlansVisible && plansContent}
         </span>
       </div>
+
       {user && (
         <>
-          <Link to="/tasks" style={{ color: 'green' }} >
+          <Link to="/tasks" style={{ color: '#3CD3AD' }}>
             <FaBook id="icons" /> Tasks
           </Link>
-          <Link to="/signup" style={{ color: 'purple' }} >
+          <Link to="/signup" style={{ color: '#4685ff' }} >
             <FaInfoCircle id="icons" /> Signup
           </Link>
-          <Link onClick={handleLogout} style={{ color: 'red' }} >
+          <Link onClick={handleLogout} style={{ color: '#E64D10' }} >
             <FaSignOutAlt id="icons" /> Logout
           </Link>
         </>
       )}
-
     </div>
   );
 }

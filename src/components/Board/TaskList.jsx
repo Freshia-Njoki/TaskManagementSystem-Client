@@ -15,6 +15,7 @@ export default function Board() {
     const [tasks, setTasks] = useState([]);
     const [showEditForm, setShowEditForm] = useState(false);
     const [tempTask, setTempTask] = useState(null);
+    const [temp, setTemp] = useState(null)
 
     useEffect(() => {
         const storedTasks = localStorage.getItem('tasks');
@@ -23,10 +24,17 @@ export default function Board() {
     }, []);
 
     const fetchAndSetTasks = async () => {
+
         try {
             const storedTasks = localStorage.getItem('tasks');
+            let fetchedTasks = null;
+
             if (storedTasks) {
                 setTasks(JSON.parse(storedTasks));
+                fetchedTasks = res.data.map((task) => ({
+                    ...task,
+                    status: "ToDo"
+                }));
             } else {
                 const res = await Axios.get(`${apiDomain}/tasks`, {
                     headers: { Authorization: user.token },
@@ -34,15 +42,30 @@ export default function Board() {
 
                 const fetchedTasks = res.data.map((task) => ({
                     ...task,
+                    status: "ToDo"
                 }));
+
+
+                setTemp(res)
+
+
+
+
 
                 setTasks(fetchedTasks);
                 localStorage.setItem('tasks', JSON.stringify(fetchedTasks));
+
             }
+
+
         } catch (error) {
             console.error(error);
         }
     };
+
+    console.log(temp)
+
+
 
     const handleDeleteTask = async (id) => {
         const regex = /card-(\d+)/;
@@ -210,6 +233,9 @@ export default function Board() {
         return <div>Loading...</div>;
     }
 
+
+
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -217,6 +243,7 @@ export default function Board() {
                     <Container ref={provided.innerRef} {...provided.droppableProps}>
                         {data.columnOrder.map((columnId, index) => {
                             const column = data.content[`column-${columnId}`];
+
                             return (
                                 <Column
                                     key={index}

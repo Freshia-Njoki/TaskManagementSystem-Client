@@ -24,7 +24,8 @@ export default function AddTask() {
                 'Authorization': `${user.token}`,//user from context
             }
         }).then((response) => {
-            // console.log(response.data)
+            console.log(response.data)
+
             reset();
             response.data.message && alert(response.data.message)
 
@@ -43,7 +44,7 @@ export default function AddTask() {
                 </textarea>
                 <p>{errors.description?.message}</p>
 
-                <input className='submitBtn' type="submit" value="save" />
+                <input className='submitBtn animatedButton' type="submit" value="save" />
             </form>
 
         </div >
