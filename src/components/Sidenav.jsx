@@ -40,7 +40,7 @@ export default function Sidenav() {
 
           <MenuItem onClick={handleAdd}><AiFillFileAdd className='icon2' />Add Task</MenuItem>
 
-          <MenuItem onClick={handleView}><TfiViewListAlt className='icon2' />View Task</MenuItem>
+          <MenuItem onClick={handleView}><TfiViewListAlt className='icon2' />Task board: drag and droppable</MenuItem>
         </Menu>
 
       </Sidebar>

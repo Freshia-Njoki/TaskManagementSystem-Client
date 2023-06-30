@@ -1,7 +1,7 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { Container, Title, Label, Avatar, } from './styles';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaDivide, FaEdit, FaTrash } from 'react-icons/fa';
 
 
 export default function Card({ data, index, onDelete, onEdit }) {
@@ -28,9 +28,10 @@ export default function Card({ data, index, onDelete, onEdit }) {
                         <Title>{data.content}</Title>
                     </div>
 
-                    <div>
-                        <FaEdit onClick={handleEdit} /> <br />
-                        <FaTrash onClick={handleDelete} />
+                    <div >
+
+                        <FaEdit onClick={handleEdit} style={{ color: 'green' }} /> <br />
+                        <FaTrash onClick={handleDelete} style={{ color: 'red' }} /> <br />
                     </div>
 
 
