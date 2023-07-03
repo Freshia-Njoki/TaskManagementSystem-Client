@@ -23,7 +23,7 @@ function LoginForm() {
   })
 
   const sendDataToServer = (data) => {
-    Axios.post(`${apiDomain}auth/login`, data)
+    Axios.post(`${apiDomain}/auth/login`, data)
       .then((response) => {
         const { data } = response;
         if (data.token) {
