@@ -227,36 +227,41 @@ export default function Board() {
     }
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                {(provided) => (
-                    <Container ref={provided.innerRef} {...provided.droppableProps}>
-                        {data.columnOrder.map((columnId, index) => {
-                            const column = data.content[`column-${columnId}`];
+        <>
+            <span>Taskboard with drag and drop functionality</span>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                    {(provided) => (
+                        <Container ref={provided.innerRef} {...provided.droppableProps}>
+                            {data.columnOrder.map((columnId, index) => {
+                                const column = data.content[`column-${columnId}`];
 
-                            return (
-                                <Column
-                                    key={index}
-                                    data={column}
-                                    index={index}
-                                    onDelete={handleDeleteTask}
-                                    onEdit={handleEditTask}
+                                return (
+                                    <Column
+                                        key={index}
+                                        data={column}
+                                        index={index}
+                                        onDelete={handleDeleteTask}
+                                        onEdit={handleEditTask}
+                                    />
+                                );
+                            })}
+                            {provided.placeholder}
+
+                            {showEditForm && (
+                                <UpdateForm
+                                    setShowEditForm={setShowEditForm}
+                                    taskData={tempTask}
+                                    updateTask={updateTask}
                                 />
-                            );
-                        })}
-                        {provided.placeholder}
+                            )}
 
-                        {showEditForm && (
-                            <UpdateForm
-                                setShowEditForm={setShowEditForm}
-                                taskData={tempTask}
-                                updateTask={updateTask}
-                            />
-                        )}
+                        </Container>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        </>
 
-                    </Container>
-                )}
-            </Droppable>
-        </DragDropContext>
     );
+
 }

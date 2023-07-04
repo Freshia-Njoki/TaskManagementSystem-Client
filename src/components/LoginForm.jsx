@@ -47,13 +47,14 @@ function LoginForm() {
   return (
     <>
       <form onSubmit={handleSubmit(sendDataToServer)} style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
+
         <p className='loginBanner'> Login Page </p>
         {/* <img className='image' src={image} alt="" srcset="" /> */}
         <label htmlFor="text"></label>
-        <input type="text" id="text" placeholder='fullName' {...register("username")} />
+        <input type="text" id="text" placeholder='for test username is: faith' {...register("username")} />
         <p>{errors.fullName?.message}</p>
         <label htmlFor="password"></label>
-        <input type="password" id='password' placeholder='password'  {...register("password")} />
+        <input type="password" id='password' placeholder='psw: faith@123'  {...register("password")} />
         <p>{errors.password?.message}</p>
         <input className='submitBtn' type="submit" value="Submit" style={{ width: "50%" }} />
 
